@@ -1,4 +1,4 @@
-# $Id: Find.pm,v 1.3 2004/08/18 02:44:03 btrott Exp $
+# $Id: Find.pm,v 1.5 2004/09/06 11:52:29 btrott Exp $
 
 package Feed::Find;
 use strict;
@@ -9,7 +9,7 @@ use HTML::Parser;
 use URI;
 
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use constant FEED_MIME_TYPES => [
     'application/x.atom+xml',
@@ -60,6 +60,10 @@ sub find {
     my $req = HTTP::Request->new(GET => $uri);
     my $res = $ua->request($req, sub {
         my($chunk, $res, $proto) = @_;
+        if ($is_feed{$res->content_type}) {
+            push @feeds, $uri;
+            die "Done parsing";
+        }
         $p->parse($chunk) or die "Done parsing";
     });
     return $class->error($res->status_line) unless $res->is_success;
@@ -103,7 +107,8 @@ I<Feed::Find> will discover the following feed formats:
 =head2 Feed::Find->find($uri)
 
 Given a URI I<$uri>, use a variety of techniques to find the feeds associated
-with that page.
+with that page. If I<$uri> itself points to a feed (i.e., if the
+I<Content-Type> of the response is a recognized feed type), returns I<$uri>.
 
 Returns a list of feed URIs.
 
