@@ -1,6 +1,10 @@
-# $Id: Changes,v 1.4 2004/09/06 11:49:20 btrott Exp $
+# $Id: Changes 799 2004-12-31 21:32:44Z btrott $
 
 Revision history for Feed::Find
+
+0.04
+    - Added Feed::Find->find_in_html to perform the same auto-discovery
+      on a chunk of HTML already in memory.
 
 0.03  2004.09.06
     - Feed::Find->find($url_of_feed) will now return $url_of_feed.

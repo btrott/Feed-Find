@@ -1,4 +1,4 @@
-# $Id: Find.pm,v 1.5 2004/09/06 11:52:29 btrott Exp $
+# $Id: Find.pm 1753 2005-01-01 00:57:41Z btrott $
 
 package Feed::Find;
 use strict;
@@ -9,7 +9,7 @@ use HTML::Parser;
 use URI;
 
 use vars qw( $VERSION );
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 use constant FEED_MIME_TYPES => [
     'application/x.atom+xml',
@@ -20,54 +20,67 @@ use constant FEED_MIME_TYPES => [
 ];
 
 our $FEED_EXT = qr/\.(?:rss|xml|rdf)$/;
+our %IsFeed = map { $_ => 1 } @{ FEED_MIME_TYPES() };
 
 sub find {
     my $class = shift;
     my($uri) = @_;
-    my $base_uri = $uri;
-    my @feeds;
-    my %is_feed = map { $_ => 1 } @{ FEED_MIME_TYPES() };
-    my $find_links = sub {
-        my($self, $tag, $attr) = @_;
-        if ($tag eq 'link') {
-            return unless $attr->{rel};
-            my %rel = map { $_ => 1 } split /\s+/, lc($attr->{rel});
-            (my $type = lc $attr->{type}) =~ s/^\s*//;
-            $type =~ s/\s*$//;
-            push @feeds, URI->new_abs($attr->{href}, $base_uri)->as_string
-               if $is_feed{$type} &&
-                  ($rel{alternate} || $rel{'service.feed'});
-        } elsif ($tag eq 'base') {
-            $base_uri = $attr->{href};
-        } elsif ($tag =~ /^(?:meta|isindex|title|script|style|head|html)$/) {
-            ## Ignore other valid tags inside of <head>.
-        } elsif ($tag eq 'a') {
-            my $href = $attr->{href} or return;
-            my $uri = URI->new($href);
-            push @feeds, URI->new_abs($href, $base_uri)->as_string
-                if $uri->path =~ /$FEED_EXT/io;
-        } else {
-            ## Anything else indicates the start of the <body>,
-            ## so we stop parsing.
-            $self->eof if @feeds;
-        }
-    };
-    my $p = HTML::Parser->new(api_version => 3,
-        start_h => [ $find_links, "self, tagname, attr" ]);
     my $ua = LWP::UserAgent->new;
     $ua->agent(join '/', $class, $class->VERSION);
     $ua->parse_head(0);   ## We're already basically doing this ourselves.
     my $req = HTTP::Request->new(GET => $uri);
+    my $p = HTML::Parser->new(api_version => 3,
+        start_h => [ \&_find_links, 'self,tagname,attr' ]);
+    $p->{base_uri} = $uri;
+    $p->{feeds} = [];
     my $res = $ua->request($req, sub {
         my($chunk, $res, $proto) = @_;
-        if ($is_feed{$res->content_type}) {
-            push @feeds, $uri;
+        if ($IsFeed{$res->content_type}) {
+            push @{ $p->{feeds} }, $uri;
             die "Done parsing";
         }
         $p->parse($chunk) or die "Done parsing";
     });
     return $class->error($res->status_line) unless $res->is_success;
-    @feeds;
+    @{ $p->{feeds} };
+}
+
+sub find_in_html {
+    my $class = shift;
+    my($html, $base_uri) = @_;
+    my $p = HTML::Parser->new(api_version => 3,
+        start_h => [ \&_find_links, 'self,tagname,attr' ]);
+    $p->{base_uri} = $base_uri;
+    $p->{feeds} = [];
+    $p->parse($$html);
+    @{ $p->{feeds} };
+}
+
+sub _find_links {
+    my($p, $tag, $attr) = @_;
+    my $base_uri = $p->{base_uri};
+    if ($tag eq 'link') {
+        return unless $attr->{rel};
+        my %rel = map { $_ => 1 } split /\s+/, lc($attr->{rel});
+        (my $type = lc $attr->{type}) =~ s/^\s*//;
+        $type =~ s/\s*$//;
+        push @{ $p->{feeds} }, URI->new_abs($attr->{href}, $base_uri)->as_string
+                if $IsFeed{$type} &&
+                   ($rel{alternate} || $rel{'service.feed'});
+    } elsif ($tag eq 'base') {
+        $p->{base_uri} = $attr->{href};
+    } elsif ($tag =~ /^(?:meta|isindex|title|script|style|head|html)$/) {
+        ## Ignore other valid tags inside of <head>.
+    } elsif ($tag eq 'a') {
+        my $href = $attr->{href} or return;
+        my $uri = URI->new($href);
+        push @{ $p->{feeds} }, URI->new_abs($href, $base_uri)->as_string
+            if $uri->path =~ /$FEED_EXT/io;
+    } else {
+        ## Anything else indicates the start of the <body>,
+        ## so we stop parsing.
+        $p->eof if @{ $p->{feeds} };
+    }
 }
 
 1;
@@ -136,6 +149,18 @@ no results.
 
 =back
 
+=head2 Feed::Find->find_in_html($html [, $base_uri ])
+
+Given a string I<$html> containing an HTML page, uses the same techniques
+as described above in I<find> to find the feeds associated with that page.
+
+If you know the URI of the page, you should provide it in I<$base_uri>, so
+that relative links can be properly made absolute. I<Feed::Find> will attempt
+to determine the correct base URI, but unless that URI is specified in the
+HTML itself (in a C<E<lt>metaE<gt>> tag), you'll need to supply it yourself.
+
+Returns a list of feed URIs.
+
 =head1 LICENSE
 
 I<Feed::Find> is free software; you may redistribute it and/or modify it
@@ -144,6 +169,6 @@ under the same terms as Perl itself.
 =head1 AUTHOR & COPYRIGHT
 
 Except where otherwise noted, I<Feed::Find> is Copyright 2004 Benjamin
-Trott, cpan@stupidfool.org. All rights reserved.
+Trott, ben+cpan@stupidfool.org. All rights reserved.
 
 =cut

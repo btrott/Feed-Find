@@ -18,3 +18,4 @@ MANIFEST			This list of files
 META.yml
 README
 t/00-compile.t
+t/01-find.t

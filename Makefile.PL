@@ -1,10 +1,10 @@
-# $Id: Makefile.PL,v 1.2 2004/08/18 02:43:20 btrott Exp $
+# $Id: Makefile.PL 1753 2005-01-01 00:57:41Z btrott $
 
 use inc::Module::Install;
 
 name('Feed-Find');
 abstract('Syndication Feed Discovery');
-author('Benjamin Trott <cpan@stupidfool.org>');
+author('Benjamin Trott <ben+cpan@stupidfool.org>');
 version_from('lib/Feed/Find.pm');
 license('perl');
 no_index(directory => 't');
