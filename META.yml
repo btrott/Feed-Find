@@ -1,0 +1,15 @@
+name: Feed-Find
+version: 0.01
+abstract: Syndication Feed Discovery
+author: Benjamin Trott <cpan@stupidfool.org>
+license: perl
+distribution_type: module
+requires:
+  LWP: 0
+  HTML::Parser: 0
+  URI: 0
+no_index:
+  directory:
+    - t
+    - inc
+generated_by: Module::Install version 0.35

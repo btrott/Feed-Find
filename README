@@ -1,0 +1,27 @@
+$Id: README,v 1.1.1.1 2004/08/15 15:40:02 btrott Exp $
+
+This is Feed::Find, a class to perform autodiscovery of syndication feeds.
+
+PREREQUISITES
+
+    * LWP
+    * HTML::Parser
+    * URI
+
+INSTALLATION
+
+Feed::Find installation is straightforward. If your CPAN shell
+is set up, you should just be able to do
+
+    % perl -MCPAN -e 'install Feed::Find'
+
+Download it, unpack it, then build it as per the usual:
+
+    % perl Makefile.PL
+    % make && make test
+
+Then install it:
+
+    % make install
+
+Benjamin Trott / cpan@stupidfool.org
