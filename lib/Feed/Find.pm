@@ -1,4 +1,4 @@
-# $Id: Find.pm 1753 2005-01-01 00:57:41Z btrott $
+# $Id: Find.pm 1769 2005-01-03 17:45:19Z btrott $
 
 package Feed::Find;
 use strict;
@@ -9,7 +9,7 @@ use HTML::Parser;
 use URI;
 
 use vars qw( $VERSION );
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 use constant FEED_MIME_TYPES => [
     'application/x.atom+xml',
@@ -68,7 +68,7 @@ sub _find_links {
                 if $IsFeed{$type} &&
                    ($rel{alternate} || $rel{'service.feed'});
     } elsif ($tag eq 'base') {
-        $p->{base_uri} = $attr->{href};
+        $p->{base_uri} = $attr->{href} if $attr->{href};
     } elsif ($tag =~ /^(?:meta|isindex|title|script|style|head|html)$/) {
         ## Ignore other valid tags inside of <head>.
     } elsif ($tag eq 'a') {

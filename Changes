@@ -1,8 +1,12 @@
-# $Id: Changes 799 2004-12-31 21:32:44Z btrott $
+# $Id: Changes 1787 2005-01-09 06:18:25Z btrott $
 
 Revision history for Feed::Find
 
-0.04
+0.05  2005.01.08
+    - Fixed bug where base URI would be unset if there was a <base>
+      tag without an href attribute.
+
+0.04  2004.12.31
     - Added Feed::Find->find_in_html to perform the same auto-discovery
       on a chunk of HTML already in memory.
 
