@@ -1,4 +1,4 @@
-# $Id: Find.pm,v 1.2 2004/08/17 17:19:05 btrott Exp $
+# $Id: Find.pm,v 1.3 2004/08/18 02:44:03 btrott Exp $
 
 package Feed::Find;
 use strict;
@@ -9,7 +9,7 @@ use HTML::Parser;
 use URI;
 
 use vars qw( $VERSION );
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use constant FEED_MIME_TYPES => [
     'application/x.atom+xml',
