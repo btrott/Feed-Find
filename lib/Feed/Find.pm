@@ -1,4 +1,4 @@
-# $Id: Find.pm 1769 2005-01-03 17:45:19Z btrott $
+# $Id: Find.pm 1875 2005-09-09 05:41:38Z btrott $
 
 package Feed::Find;
 use strict;
@@ -9,11 +9,12 @@ use HTML::Parser;
 use URI;
 
 use vars qw( $VERSION );
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 use constant FEED_MIME_TYPES => [
     'application/x.atom+xml',
     'application/atom+xml',
+    'application/xml',
     'text/xml',
     'application/rss+xml',
     'application/rdf+xml',
@@ -134,8 +135,8 @@ The following techniques are used:
 If the page contains any I<E<lt>linkE<gt>> tags in the I<E<lt>headE<gt>>
 section, these tags are examined for recognized feed content types. The
 following content types are treated as feeds: I<application/x.atom+xml>,
-I<application/atom+xml>, I<text/xml>, I<application/rss+xml>, and
-I<application/rdf+xml>.
+I<application/atom+xml>, I<application/xml>, I<text/xml>,
+I<application/rss+xml>, and I<application/rdf+xml>.
 
 =item 2. Scanning I<E<lt>aE<gt>> tags
 

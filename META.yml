@@ -1,5 +1,5 @@
 name: Feed-Find
-version: 0.05
+version: 0.06
 abstract: Syndication Feed Discovery
 author: Benjamin Trott <ben+cpan@stupidfool.org>
 license: perl
