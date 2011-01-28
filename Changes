@@ -2,6 +2,7 @@ Revision history for Feed::Find
 
 0.07  2011.01.28
     - Use $ua->env_proxy to load local proxy settings. (RT 53817)
+    - Fixed documentation for find_in_html. (RT 19183)
     - Removed sign() and auto_install() from Makefile.PL.
     - Removed magic svn keywords.
     - Converted test suite to Test::More.

@@ -150,10 +150,11 @@ no results.
 
 =back
 
-=head2 Feed::Find->find_in_html($html [, $base_uri ])
+=head2 Feed::Find->find_in_html(\$html [, $base_uri ])
 
-Given a string I<$html> containing an HTML page, uses the same techniques
-as described above in I<find> to find the feeds associated with that page.
+Given a reference to a string I<$html> containing an HTML page, uses the
+same techniques as described above in I<find> to find the feeds associated
+with that page.
 
 If you know the URI of the page, you should provide it in I<$base_uri>, so
 that relative links can be properly made absolute. I<Feed::Find> will attempt
