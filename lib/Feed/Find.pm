@@ -8,7 +8,7 @@ use HTML::Parser;
 use URI;
 
 use vars qw( $VERSION );
-$VERSION = '0.06';
+$VERSION = '0.07';
 
 use constant FEED_MIME_TYPES => [
     'application/x.atom+xml',
