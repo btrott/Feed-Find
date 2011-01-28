@@ -12,6 +12,7 @@ is(scalar @feeds, 1);
 is($feeds[0], BASE . 'ok.xml');
 
 my $ua = LWP::UserAgent->new;
+$ua->env_proxy;
 my $req = HTTP::Request->new(GET => BASE . 'anchors-only.html');
 my $res = $ua->request($req);
 @feeds = Feed::Find->find_in_html(\$res->content, BASE . 'anchors-only.html');

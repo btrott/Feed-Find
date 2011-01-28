@@ -26,6 +26,7 @@ sub find {
     my $class = shift;
     my($uri) = @_;
     my $ua = LWP::UserAgent->new;
+    $ua->env_proxy;
     $ua->agent(join '/', $class, $class->VERSION);
     $ua->parse_head(0);   ## We're already basically doing this ourselves.
     my $req = HTTP::Request->new(GET => $uri);
