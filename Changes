@@ -1,6 +1,11 @@
-# $Id: Changes 1874 2005-09-09 05:40:22Z btrott $
-
 Revision history for Feed::Find
+
+0.07  2011.01.28
+    - Removed sign() and auto_install() from Makefile.PL.
+    - Removed magic svn keywords.
+    - Converted test suite to Test::More.
+    - Added author tests (xt/) and modified SYNOPSIS for all modules to
+      make them pass the compilation test.
 
 0.06  2005.09.08
     - Added application/xml as a valid feed type, because certain

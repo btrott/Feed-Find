@@ -1,5 +1,3 @@
-# $Id: 01-find.t 1752 2005-01-01 00:54:51Z btrott $
-
 use strict;
 use Test::More tests => 4;
 use Feed::Find;

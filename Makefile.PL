@@ -1,23 +1,17 @@
-# $Id: Makefile.PL 1753 2005-01-01 00:57:41Z btrott $
-
 use inc::Module::Install;
+name 'Feed-Find';
+all_from 'lib/Feed/Find.pm';
+readme_from 'lib/Feed/Find.pm';
 
-name('Feed-Find');
-abstract('Syndication Feed Discovery');
-author('Benjamin Trott <ben+cpan@stupidfool.org>');
-version_from('lib/Feed/Find.pm');
-license('perl');
-no_index(directory => 't');
-sign(1);
+requires 'Class::ErrorHandler';
+requires 'LWP';
+requires 'HTML::Parser';
+requires 'URI';
 
-include('ExtUtils::AutoInstall');
+test_requires 'Test::More';
 
-requires('Class::ErrorHandler');
-requires('LWP');
-requires('HTML::Parser');
-requires('URI');
-
-auto_include();
-auto_install();
-
-&WriteAll;
+use_test_base;
+auto_include_deps;
+author_tests('xt');
+auto_set_repository;
+WriteAll;

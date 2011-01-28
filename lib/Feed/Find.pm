@@ -1,7 +1,6 @@
-# $Id: Find.pm 1875 2005-09-09 05:41:38Z btrott $
-
 package Feed::Find;
 use strict;
+use 5.008_001;
 
 use base qw( Class::ErrorHandler );
 use LWP::UserAgent;
