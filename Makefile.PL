@@ -9,5 +9,7 @@ requires 'HTML::Parser';
 requires 'URI';
 
 test_requires 'Test::More';
+test_requires "CGI::Application::Server";
+test_requires "HTTP::Server::Simple";
 
 WriteAll;
