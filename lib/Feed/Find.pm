@@ -1,5 +1,6 @@
 package Feed::Find;
 use strict;
+use warnings;
 use 5.008_001;
 
 use base qw( Class::ErrorHandler );
